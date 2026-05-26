@@ -1,75 +1,21 @@
-# Two-Level Logic Minimizer (Quine-McCluskey & PI Chart Reduction)
+Step 1 (입력 및 이진 변환):
+    사용자로부터 변수의 개수(N)와 10진수 minterm 리스트, 그리고 don't care 리스트를 각각 입력받는다. 입력받은 모든 10진수 번호들을 반복적인 나머지 연산을 통해 자릿수에 맞는 2진수 형태의
+    문자열로 변환하고, 구분 없이 하나의 초기 리스트로 합쳐서 저장한다.
 
-[![Java Version](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://www.oracle.com/java/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+Step 2 (1의 개수로 그룹화):
+    초기 리스트에 저장된 모든 minterm과 don't care 이진수 문자열 내의 문자 '1'의 개수를 카운트하여 그룹별로 정렬 및 분류한다.
 
-본 프로젝트는 **한동대학교(Handong Global University) 논리설계 보너스 과제**로 개발되는 **2단 논리 간소화(Two-Level Logic Minimizer) 프로그램**입니다. 부울 함수(Boolean Function)의 Minterm과 Don't Care 조건을 입력받아, **Quine-McCluskey 방법** 및 **PI Chart Reduction 알고리즘**을 활용하여 논리적으로 가장 최적화된 최소 SOP(Sum-of-Products) 식을 완벽하게 도출합니다.
+Step 3 (인접 그룹 결합):
+    인접 그룹 간 원소들을 비교하여 단 한 자리만 다른 자리를 대시 문자( 'x' )로 치환하여 병합하고, 결합된 부모 항들에는 사용 체크 표시를 수행한다.
+    다음 단계로 넘어갈 때는
 
----
+    1. 기존 대시( 'x' )의 자릿수와 위치가 완벽히 일치하고
+    2. 대시 외의 자리 중 단 한 자리만 다를 때에만 병합하며, 중복 생성된 항들은 제거하여 단순화한다.
+    이 과정을 더 이상 새로운 결합 항이 없을 때까지 반복 수행하여 최종적으로 체크 표시를 받지 못한 모든 항들을 PI로 추출한다.
 
-## 🚀 핵심 설계 사양 (Key Specifications)
+Step 4 (2차원 행렬 구현 및 축소):
+    추출된 PI들을 행에 두고, 입력받았던 minterm들을 열에 배치하여 2차원 행렬을 제작한다. (※ 이때 don't care 번호들은 열 목록에서 완전히 제외하여 커버 대상에서 배제한다.)
 
-1. **직관적인 문자열(String) 기반 설계 ($N \le 10$)**
-   * 입력 변수의 개수를 $N \le 10$으로 설정하여 연산 시간 부담이 극히 적으므로, 복잡하고 디버깅이 어려운 비트 연산 대신 직관적인 **이진 문자열(String)** 연산을 핵심 표현법으로 채택했습니다.
-   * 각 항(Term)은 `"01-0"`, `"0-10"` 같은 이진 문자열로 표현되어 사람이 한눈에 중간 계산 상태를 읽고 정확하게 검증할 수 있습니다.
-
-2. **완벽한 PI Chart Reduction**
-   * **EPI(Essential Prime Implicant) 추출**: 단 하나의 PI에 의해서만 커버되는 Minterm을 감지하여 필수 주임플리컨트로 자동 선정합니다.
-   * **Row & Column Domination(행/열 지배 법칙)**: 표를 반복해서 수학적으로 간소화하여 연산 규모를 최대로 축소합니다.
-
-3. **Branch-and-Bound 기반 순환 표(Cyclic Table) 해결**
-   * EPI 제거와 지배 법칙만으로 더 이상 줄어들지 않고 순환 관계에 빠진 표(Cyclic Table)에 대해 **Branching Approach**를 적용하여 모든 조합을 탐색합니다.
-   * **평가 기준**: [1] 곱의 항(Product Terms) 수 최소화 $\rightarrow$ [2] 리터럴(Literals) 수 최소화를 만족하는 최적의 최종 해를 완전 탐색해 냅니다.
-
-4. **엄격한 Don't Care 처리**
-   * Don't care 조건은 Quine-McCluskey 병합(PI 추출) 시에는 활용되나, 최종 PI Chart의 열(Column) 구성 시에는 완벽히 배제되어 불필요한 조건 커버에 의한 비최적화를 원천 방지합니다.
-
----
-
-## 📁 프로젝트 폴더 구조 (Project Structure)
-
-```text
-design/
-├── .idea/                      # IntelliJ 프로젝트 설정 폴더
-├── docs/                       # 설계 및 시험 대비 핵심 가이드 문서
-│   ├── data_structure_design.md  # Java OOP 기반 문자열 자료구조 설계서
-│   ├── proposal_draft.md         # 과제 제안서(Proposal) 공식 초안
-│   ├── pseudocode_and_logic.md   # 병합/Reduction/Branching 상세 자바 의사코드
-│   ├── oral_test_prep.md         # 구술 면접(Oral Test) 예상 질문 및 보고서 뼈대
-│   ├── implementation_plan.md    # 최종 결정된 설계 사양이 포함된 개발 계획서
-│   ├── task.md                   # 단계별 태스크 달성 상태 현황판
-│   └── walkthrough.md            # 마이그레이션 및 설계 결과 요약서
-├── src/                        # 소스 코드 디렉토리 (Java 클래스 구현)
-│   ├── Main.java               # 입출력 CLI 및 프로그램 실행 진입점
-│   ├── Implicant.java          # 개별 항(Term) 정보 및 단일 결합 객체
-│   ├── LogicSimplifier.java     # Hamming Weight 기반 그룹화 및 PI 추출 엔진
-│   └── PIChart.java            # 표 축소 및 Branching 솔버
-├── README.md                   # 프로젝트 개요 (본 문서)
-└── .gitignore                  # Git 빌드 출력물 및 개인 설정 제외 파일
-```
-
----
-
-## 🛠️ 설치 및 실행 방법 (How to Build & Run)
-
-### 요구사항 (Requirements)
-* **Java Development Kit (JDK)**: 17 버전 이상 추천
-* **IDE**: IntelliJ IDEA (추천) 또는 Eclipse
-
-### 실행 방법 (CLI)
-1. 리포지토리를 복사합니다:
-   ```bash
-   git clone https://github.com/prestige-kim/Logic-Design.git
-   cd Logic-Design
-   ```
-2. Java 소스 코드를 컴파일하고 실행합니다 (코드 구현 완료 후):
-   ```bash
-   javac -d bin src/*.java
-   java -cp bin Main
-   ```
-
----
-
-## 🎓 한동대학교 논리설계 보너스 과제 방침 준수
-* **AI 직접 코드 작성 금지**: 이 프로그램의 소스 코드는 인공지능이 직접 생성하지 않았으며, 설계 및 예외 논리 검증의 안내를 바탕으로 **학생이 직접 작성**합니다.
-* **부분점수 없음**: 완벽한 연산 및 모든 예외 상황(Cyclic, Don't Care) 검증을 통과하도록 극도로 촘촘하게 설계되었습니다.
+    1. EPI 추출: 특정 Minterm 열을 단독으로 커버하는 유일한 PI(EPI)를 찾아 최종 식에 포함시키고, 해당 행과 커버되는 모든 열을 행렬에서 지운다.
+    2. 행렬 축소: 행렬이 완전히 비워지지 않았다면, 커버 범위가 좁은 행(열세인 행)과 쉽게 커버되는 열(지배하는 열)을 분석하여 행렬에서 지운다.
+    3. 최종 변환: 표가 완전히 비워지면 선택된 PI들을 원래의 부울 변수의 SOP 식으로 변환하여 최종 결론을 도출한다.
