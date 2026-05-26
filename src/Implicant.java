@@ -4,6 +4,7 @@ import java.util.List;
 public class Implicant {
     public String term;            // 이진 문자열 표현 (예: "0-10", "1100")
     public List<Integer> minterms; // 이 항이 커버하는 원래의 Minterm 번호 목록
+    public boolean isUsed;
 
     // 초기 0차(Column 0) 생성자 (예: 5가 입력되면 "0101" 문자열 생성)
     public Implicant(int numVars, int mintermValue) {

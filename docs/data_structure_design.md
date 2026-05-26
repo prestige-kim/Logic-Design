@@ -18,10 +18,10 @@ classDiagram
         +Implicant combine(Implicant other)
     }
 
-    class QuineMcCluskey {
+    class LogicSimplifier {
         -int numVars
         +List~List~Implicant~~ groupByHammingWeight(List~Implicant~ implicants)
-        +List~Implicant~ runQuineMcCluskey(List~Integer~ minterms, List~Integer~ dontCares)
+        +List~Implicant~ runLogicSimplifier(List~Integer~ minterms, List~Integer~ dontCares)
     }
 
     class PIChart {
@@ -32,7 +32,7 @@ classDiagram
         +List~Implicant~ solveBranching()
     }
 
-    QuineMcCluskey --> Implicant : 생성 및 그룹화, 결합 관리
+    LogicSimplifier --> Implicant : 생성 및 그룹화, 결합 관리
     PIChart --> Implicant : Prime Implicant 매핑 및 표 축소 수행
 ```
 
@@ -58,14 +58,14 @@ classDiagram
 
 ---
 
-### 2.2. `QuineMcCluskey` 클래스 (PI 추출 엔진)
+### 2.2. `LogicSimplifier` 클래스 (PI 추출 엔진)
 Minterm들과 Don't Care들을 그룹화하고 결합하여 최종 Prime Implicant(PI) 목록을 뽑아내는 통제 모듈입니다.
 
 * **핵심 메서드**:
   * `List<List<Implicant>> groupByHammingWeight(List<Implicant> implicants)`:
     * 입력된 `Implicant` 리스트를 1의 개수에 따라 분류하여 반환합니다.
     * 총 $N+1$개의 그룹 리스트를 생성하여 각 임플리컨트를 분배합니다.
-  * `List<Implicant> runQuineMcCluskey(List<Integer> minterms, List<Integer> dontCares)`:
+  * `List<Implicant> runLogicSimplifier(List<Integer> minterms, List<Integer> dontCares)`:
     * Column 0부터 시작하여, 인접 그룹 간 이중 `for` 루프로 `canCombineWith`를 호출하며 다음 Column의 병합 항들을 만들어 냅니다.
     * 더 이상 병합되지 않고 남은(결합에 사용되지 않은) 항들을 수집하여 최종 **Prime Implicants (PI)** 리스트로 반환합니다.
 

@@ -95,7 +95,7 @@ public Implicant combine(Implicant other) {
 
 ---
 
-## 2. `QuineMcCluskey` 결합 엔진 설계
+## 2. `LogicSimplifier` 결합 엔진 설계
 
 ### 2.1. Hamming Weight 그룹 분류 로직
 ```java
@@ -115,7 +115,7 @@ public List<List<Implicant>> groupByHammingWeight(List<Implicant> implicants) {
 ### 2.2. 전체 PI 추출 알고리즘 흐름
 더 이상 병합되지 않고 남은(isUsed == false) 항들을 추출하여 최종 Prime Implicant 목록을 모읍니다.
 ```java
-public List<Implicant> runQuineMcCluskey(List<Integer> minterms, List<Integer> dontCares) {
+public List<Implicant> runLogicSimplifier(List<Integer> minterms, List<Integer> dontCares) {
     // 1. Column 0 구성
     List<Implicant> currentColumn = new ArrayList<>();
     for (int m : minterms) currentColumn.add(new Implicant(numVars, m));

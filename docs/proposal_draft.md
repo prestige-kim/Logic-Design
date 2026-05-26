@@ -56,6 +56,6 @@
 
 ### 3.1. 핵심 모듈 구성
 * **`Implicant`**: 개별 항의 정보를 이진 문자열(`term`) 형태로 지니고 있는 데이터 객체. 1의 개수 세기 및 단일 결합 기능 수행.
-* **`QuineMcCluskey`**: 1의 개수별로 그룹화(`groupByHammingWeight`)하고 병합을 반복하여 Prime Implicant(PI) 목록을 추출하는 조율기.
+* **`LogicSimplifier`**: 1의 개수별로 그룹화(`groupByHammingWeight`)하고 병합을 반복하여 Prime Implicant(PI) 목록을 추출하는 조율기.
 * **`PIChart`**: PI와 Minterm의 관계 표를 만들고, EPI 추출, 행/열 지배 및 Branching 알고리즘을 종합 수행하는 최적화 솔버.
 * **`Main`**: 콘솔 입출력을 담당하고 각 클래스 객체를 유기적으로 연결하여 작동시키는 메인 진입점.

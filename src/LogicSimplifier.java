@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuineMcCluskey {
+public class LogicSimplifier {
     private int numVars;
 
-    public QuineMcCluskey(int numVars){
+    public LogicSimplifier(int numVars){
         this.numVars = numVars;
     }
 

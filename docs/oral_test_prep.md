@@ -57,7 +57,7 @@
 
 3. **Software Design & Architecture (설계 및 아키텍처)**
    * **데이터 구조**: `Implicant` 클래스의 직관적인 이진법 문자열(`term`) 설계 설명
-   * **모듈 구조**: `Implicant`, `QuineMcCluskey`, `PIChart` 클래스의 단일 책임 분담 설계
+   * **모듈 구조**: `Implicant`, `LogicSimplifier`, `PIChart` 클래스의 단일 책임 분담 설계
 
 4. **Implementation Details (구현 상세)**
    * Minterm 이진법 문자열 변환 및 1의 개수 기반 그룹화 루프 구성

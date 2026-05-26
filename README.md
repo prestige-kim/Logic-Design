@@ -42,7 +42,7 @@ design/
 ├── src/                        # 소스 코드 디렉토리 (Java 클래스 구현)
 │   ├── Main.java               # 입출력 CLI 및 프로그램 실행 진입점
 │   ├── Implicant.java          # 개별 항(Term) 정보 및 단일 결합 객체
-│   ├── QuineMcCluskey.java     # Hamming Weight 기반 그룹화 및 PI 추출 엔진
+│   ├── LogicSimplifier.java     # Hamming Weight 기반 그룹화 및 PI 추출 엔진
 │   └── PIChart.java            # 표 축소 및 Branching 솔버
 ├── README.md                   # 프로젝트 개요 (본 문서)
 └── .gitignore                  # Git 빌드 출력물 및 개인 설정 제외 파일

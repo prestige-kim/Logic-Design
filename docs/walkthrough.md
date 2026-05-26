@@ -22,7 +22,7 @@
 ````carousel
 # [1] Java OOP 자료구조 설계서
 [data_structure_design.md](file:///Users/proudchris/.gemini/antigravity-cli/brain/48de8e19-e686-4fe4-9526-d327ee423b34/scratch/data_structure_design.md)
-* Java의 객체지향적 특성을 살린 `Implicant`, `QuineMcCluskey`, `PIChart` 클래스의 모듈 구조 정의.
+* Java의 객체지향적 특성을 살린 `Implicant`, `LogicSimplifier`, `PIChart` 클래스의 모듈 구조 정의.
 * $N \le 10$에서 `mask`와 `value` 비트 필드를 이용해 대시(`-`) 상태와 병합을 구현하는 핵심 방식 설명.
 
 <!-- slide -->
@@ -36,7 +36,7 @@
 [pseudocode_and_logic.md](file:///Users/proudchris/.gemini/antigravity-cli/brain/48de8e19-e686-4fe4-9526-d327ee423b34/scratch/pseudocode_and_logic.md)
 * 자바 코드로 바로 옮겨 담을 수 있는 수준의 정교한 의사코드 제공:
   * `Implicant.canCombineWith()` 및 `combine()` 비트연산 로직
-  * `QuineMcCluskey`의 Hamming Weight 기반 다차 결합 반복 루프
+  * `LogicSimplifier`의 Hamming Weight 기반 다차 결합 반복 루프
   * `PIChart`의 EPI 추출, Row/Column Domination 판별 로직
   * Cyclic Table 탈출을 위한 재귀적 `solveBranching()` 완전 탐색 로직
 * Don't care 제외 규칙 및 순환 표 검증을 위한 핵심 테스트 케이스 설명.
@@ -64,5 +64,5 @@
 ## 4. 사용자 실행 가이드 (IntelliJ 개발 시작)
 
 1. **IntelliJ 프로젝트 열기**: 현재 활성화되어 있는 `/Users/proudchris/Desktop/논리설계/design` 폴더가 IntelliJ로 정상적으로 잡혀 있습니다.
-2. **Java 클래스 생성**: `src` 폴더에 `Implicant.java`, `QuineMcCluskey.java`, `PIChart.java`, `AppMain.java`를 생성합니다.
+2. **Java 클래스 생성**: `src` 폴더에 `Implicant.java`, `LogicSimplifier.java`, `PIChart.java`, `AppMain.java`를 생성합니다.
 3. **코드 작성**: 설계서의 아키텍처와 상세한 의사코드([pseudocode_and_logic.md](file:///Users/proudchris/.gemini/antigravity-cli/brain/48de8e19-e686-4fe4-9526-d327ee423b34/scratch/pseudocode_and_logic.md))를 모방하여 자바 클래스 내에 코드를 직접 채워 나가시면 됩니다!
