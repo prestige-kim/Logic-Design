@@ -14,8 +14,8 @@
 
 > [!NOTE]
 > **구현 언어 및 자료구조 선정**
-> - **언어 선정**: Java 혹은 C++가 객체 지향 및 비트연산의 이점을 살리기에 적합합니다. 메모리 관리와 디버깅 편의성을 고려하면 Java가 객체 구조화에 우수하며, 하드웨어 수준의 빠른 비트 조작 및 메모리 최적화를 원한다면 C++가 훌륭한 대안입니다. 사용자의 선호 언어 확인이 필요합니다.
-> - **자료구조 후보군**: Bitwise 연산(Bitmasking)을 활용할 것인지, 아니면 문자열과 객체 기반으로 상태를 관리할 것인지에 대한 설계적 결단이 필요합니다.
+> - **언어 선정**: Java가 객체지향 아키텍처 및 문자열 비교 처리에 우수하므로 Java를 언어로 채택했습니다.
+> - **자료구조 확정**: 복잡한 비트마스킹 방식 대신, 사람이 즉시 해독 가능한 **직관적인 문자열(String)과 문자 비교** 방식을 통해 디버깅 신뢰성을 확보하고 로직 구현 난이도를 낮췄습니다.
 
 ---
 
@@ -24,10 +24,10 @@
 > [!TIP]
 > **최종 결정된 설계 사양**
 > 1. **입력 변수의 최대 개수 ($N \le 10$)**:
->    - 최대 Minterm 개수가 $2^{10} = 1024$개이므로 성능적 부담이 적습니다.
->    - 32-bit `int`를 이용한 **비트마스킹(Bitmasking)** 기법을 사용하여 각 항의 이진 표현 및 대시(`-`) 상태를 극도로 가볍고 효율적으로 관리합니다.
+>    - 최대 Minterm 개수가 $2^{10} = 1024$개이므로 연산 시간적 부담이 거의 없습니다.
+>    - 이에 따라 성능 최적화 대신 가독성이 가장 뛰어난 **문자열 기반의 Implicant 모델링**을 채택했습니다.
 > 2. **순환 표(Cyclic Chart) 해결을 위한 Branching Approach 적용**:
->    - EPI 제거 및 Row/Column Domination 후에도 표가 축소되지 않고 남는 경우, 교수님 가이드라인에 따라 **Branching Approach (Branch-and-Bound)**를 활용하여 가능한 모든 조합 중 리터럴 수가 가장 적은 최소 SOP 식을 탐색하여 도출합니다.
+>    - EPI 제거 및 Row/Column Domination 후에도 표가 축소되지 않고 남는 경우, 교수님 가이드라인에 따라 **Branching Approach (Branch-and-Bound)**를 활용하여 가능한 모든 조합 중 곱의 항 개수와 리터럴 수가 가장 적은 최소 SOP 식을 재귀적으로 탐색하여 도출합니다.
 
 ---
 
@@ -36,20 +36,20 @@
 코드 직접 생성이 금지되어 있으므로, 우리의 변경 사항은 사용자가 소스 코드를 올바르게 작성할 수 있도록 안내하는 설계 문서 및 가이드를 생성하는 것입니다.
 
 ### Phase 1: 알고리즘 흐름 및 핵심 데이터 구조 정의
-- **목표**: 비트마스킹 대 객체 지향 설계 비교 분석, Don't care 병합 시 처리 논리 확립, Row/Column Domination의 수학적 모델화.
-- [NEW] [data_structure_design.md](file:///Users/proudchris/.gemini/antigravity-cli/brain/48de8e19-e686-4fe4-9526-d327ee423b34/scratch/data_structure_design.md) (설계 문서)
+- **목표**: 문자열 비교 기반 OOP 설계 비교 분석, Don't care 병합 시 처리 논리 확립, Row/Column Domination의 모델화.
+- [NEW] [data_structure_design.md](file:///Users/proudchris/Desktop/논리설계/design/docs/data_structure_design.md) (설계 문서)
 
 ### Phase 2: 과제 제안서(Proposal) 초안 및 모듈 인터페이스 정의
 - **목표**: 13주차 화요일 마감에 맞춘 Proposal 문서 작성 지원. 핵심 클래스(또는 구조체) 인터페이스 및 함수 프로토타입 작성, 구현 타임라인 구조화.
-- [NEW] [proposal_draft.md](file:///Users/proudchris/.gemini/antigravity-cli/brain/48de8e19-e686-4fe4-9526-d327ee423b34/scratch/proposal_draft.md) (제안서 아웃라인 및 구조)
+- [NEW] [proposal_draft.md](file:///Users/proudchris/Desktop/논리설계/design/docs/proposal_draft.md) (제안서 아웃라인 및 구조)
 
 ### Phase 3: 알고리즘 상세 설계 (의사코드 & 논리 검증)
 - **목표**: Minterm 결합 Logic, PI Chart Reduction(EPI 식별, Row/Col Domination, Cyclic chart)의 정교한 의사코드 작성 및 시각적 예외 검증.
-- [NEW] [pseudocode_and_logic.md](file:///Users/proudchris/.gemini/antigravity-cli/brain/48de8e19-e686-4fe4-9526-d327ee423b34/scratch/pseudocode_and_logic.md)
+- [NEW] [pseudocode_and_logic.md](file:///Users/proudchris/Desktop/논리설계/design/docs/pseudocode_and_logic.md)
 
 ### Phase 4: 모의 구술 면접 및 보고서 구조화
 - **목표**: Oral Test 대비 개념 검증 질문 리스트 구성, 코드가 막혔을 때의 추적 기법, 최적화 이론 설명 가이드 제공.
-- [NEW] [oral_test_prep.md](file:///Users/proudchris/.gemini/antigravity-cli/brain/48de8e19-e686-4fe4-9526-d327ee423b34/scratch/oral_test_prep.md)
+- [NEW] [oral_test_prep.md](file:///Users/proudchris/Desktop/논리설계/design/docs/oral_test_prep.md)
 
 ---
 
