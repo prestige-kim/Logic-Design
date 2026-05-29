@@ -77,41 +77,34 @@ public class Implicant {
      * @return 결합된 새로운 Implicant 객체, 혹은 결합 불가능 시 null
      */
     public Implicant combine(Implicant other) {
-        // 길이가 다르면 결합 불가능
         if (this.term.length() != other.term.length()) {
             return null;
         }
 
-        int diffCount = 0;
         int diffIndex = -1;
-
         for (int i = 0; i < this.term.length(); i++) {
             char c1 = this.term.charAt(i);
             char c2 = other.term.charAt(i);
 
             if (c1 != c2) {
-                // 대시('x')의 위치가 다르면 결합 불가능
-                if (c1 == 'x' || c2 == 'x') {
+                // 대시('x') 위치가 다르거나 다른 문자가 이미 발견된 경우 (2개 이상의 문자가 다름) 결합 불가
+                if (c1 == 'x' || c2 == 'x' || diffIndex != -1) {
                     return null;
                 }
-                diffCount++;
                 diffIndex = i;
             }
         }
 
-        // 정확히 한 자리 비트만 달라야만 결합 가능
-        if (diffCount != 1) {
+        // 모든 문자가 같으면 결합 불가
+        if (diffIndex == -1) {
             return null;
         }
 
-        // 다른 한 자리를 대시('x')로 교체하여 새로운 문자열 작성
-        char[] chars = this.term.toCharArray();
-        chars[diffIndex] = 'x';
-        String newTerm = new String(chars);
+        // 한 자리의 다른 문자를 'x'로 교체하여 새로운 문자열 작성
+        String newTerm = this.term.substring(0, diffIndex) + "x" + this.term.substring(diffIndex + 1);
 
-        // 두 임플리컨트의 오리지널 민텀 목록을 병합 및 정렬 (TreeSet으로 중복 제거 및 자연 정렬)
-        Set<Integer> mergedMinterms = new TreeSet<>();
-        mergedMinterms.addAll(this.minterms);
+        // 자연 정렬 및 중복을 제거하며 두 리스트의 민텀 목록 병합
+        Set<Integer> mergedMinterms = new TreeSet<>(this.minterms);
         mergedMinterms.addAll(other.minterms);
 
         return new Implicant(newTerm, new ArrayList<>(mergedMinterms));
