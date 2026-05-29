@@ -1,0 +1,72 @@
+[Implicant Class Method List]
+
+    1. Implicant(int numVars, int mintermValue)
+       - 10진수 민텀 번호를 지정된 변수 자릿수에 맞는 이진 문자열로 변환
+
+    2. Implicant(String term, List<Integer> minterms)
+       - 두 항이 결합된 형태의 이진 문자열과 커버하는 기존 minterm 목록을 입력받아 상위의 Implicant 객체를 생성합니다.
+
+    3. toBinaryString(int value, int numVars) [private]
+       - 10진수 숫자를 연산(반복적 나머지 연산)을 통해 이진 문자열 제작.
+
+    4. countOnes()
+       - 현재 항의 이진 문자열에서 '1'의 개수만을 카운트하여 반환.
+
+    5. canCombineWith(Implicant other)
+       - 자신(this)과 비교하여 대시('x')의 위치가 같고, 대시 외의 자리 중 단 한 자리만 다른지 확인해 결합 가능 여부를
+         반환.
+
+    6. combine(Implicant other)
+       - 다른 항과 결합을 수행하여 서로 다른 단 하나의 비트 자리를 대시('x')로 치환하고, 두 객체의 민텀 리스트를 합친 새
+         Implicant 객체를 생성.
+
+    7. equals(Object obj) [Override]
+       - 결합 과정에서 중복 생성된 항들을 컬렉션(Set 등)에서 자동으로 제거할 수 있도록 이진 표현(term)을 기준으로 동등성을 판별.
+
+    8. hashCode() [Override]
+       - equals의 동등성 기준인 이진 표현(term) 문자열의 해시 코드를 반환하여 해시 기반 컬렉션에서의 동작을 보장합니다.
+
+    9. toString() [Override]
+       - 디버깅 콘솔 출력을 위해 이진 표현과 커버하는 민텀 리스트를 하나의 문자열 포맷으로 변환해 반환. (예: "01x0 [2, 6]")
+
+
+[LogicSimplifier] Class Method List
+
+    반복문 안에서 Column 이라는 그룹 객체를 비교 후에 지속적으로 업데이트 함으로써 최종 v 표시를 받지 못한 PI 를 찾는다.
+
+    1. LogicSimplifier(int numVars)
+       - 입력받을 부울 변수의 개수(N)를 기입받아 내부 멤버 변수로 설정.
+
+    2. simplify(List<Integer> minterms, List<Integer> dontCares)
+       - 입력받은 민텀과 돈케어 리스트를 바탕으로 리스트를 제작.
+
+    3. groupByOneCount(List<Implicant> implicants)
+       - 입력된 항들을 1의 개수(0개부터 N개까지)에 따라 분류하여 List<List<Implicant>> 형태의 그룹 목록을 생성.
+
+    4. findPI(List<Implicant> initial)
+       - 더 이상 그룹 간에 결합이 일어나지 않을 때까지 combineGroups를 반복 호출하며, 결합에 한 번도 사용되지 않은 모든 PI를 탐색.
+
+    5. combineGroups(List<List<Implicant>> current, List<Implicant> nextColumn)
+       - 1의 개수가 i개인 그룹과 i+1개인 인접 그룹의 원소들을 2중 루프로 전부 대조, 결합 가능한 항들을 새로운 Column에 등록하고 결합 여부를 업데이트.
+
+
+
+[PIChart] Class Method List
+
+    1. PIChart(List<Implicant> piList, List<Integer> mtList)
+       - 추출된 PI 목록과 오리지널 민텀 목록을 받아 2차원 행렬의 행/열 삭제 추적 배열을 초기화하는 생성자.
+
+    2. buildChart()
+       - 각 PI가 어떤 민텀 번호를 커버하는지 매칭하여 2차원 배열 완성.
+
+    3. selectEPI()
+       - 차트에서 단 하나의 PI로만 커버되는 민텀(열)을 찾아 필수 EPI로 선정, 관련 행과 커버되는 모든 열을 삭제.
+
+    4. reduceMatrixByCover()
+       - 행과 열의 덮음 관계를 행렬에 적용하여 불필요하거나 중복되는 행과 열을 지우고 차트 크기 조정.
+
+    5. isRowCover(int rowA, int rowB)
+       - 행 A가 커버하는 민텀 범위가 행 B가 커버하는 범위를 완벽히 커버하여 포함하는 관계인지 판별.
+
+    6. isColCover(int colA, int colB)
+       - 열 A를 커버하는 PI들의 범위가 열 B를 커버하는 범위를 완벽히 커버하여 포함하는 관계인지 판별.
