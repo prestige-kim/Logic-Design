@@ -105,7 +105,7 @@ public class Main {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < imp.term.length(); i++) {
                 char c = imp.term.charAt(i);
-                char varName = (char) ('A' + i); // 변수 인덱스에 따라 A, B, C, D... 매핑
+                String varName = "x" + (i + 1); // 변수 인덱스에 따라 x1, x2, x3... 매핑
 
                 if (c == '1') {
                     sb.append(varName);
