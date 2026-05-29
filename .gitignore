@@ -20,6 +20,6 @@ bin/
 .DS_Store
 Thumbs.db
 
-# Keep local Java source files and screenshots untracked on GitHub
-src/*.java
+# Keep screenshots untracked on GitHub
 screenshot*.png
+
