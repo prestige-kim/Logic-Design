@@ -34,7 +34,7 @@ public class Implicant {
     public Implicant(String term, List<Integer> minterms) {
         this.term = term;
         // 외부 리스트의 부작용을 막기 위해 복사하여 새로 생성합니다.
-        this.minterms = new ArrayList<>(minterms);
+        this.minterms = new ArrayList<>(minterms); // 클래스 변수니깐 복사해서 받아야함
         this.isUsed = false;
     }
 
@@ -103,11 +103,32 @@ public class Implicant {
         // 한 자리의 다른 문자를 'x'로 교체하여 새로운 문자열 작성
         String newTerm = this.term.substring(0, diffIndex) + "x" + this.term.substring(diffIndex + 1);
 
-        // 자연 정렬 및 중복을 제거하며 두 리스트의 민텀 목록 병합
-        Set<Integer> mergedMinterms = new TreeSet<>(this.minterms);
-        mergedMinterms.addAll(other.minterms);
+        // 두 리스트가 이미 오름차순으로 정렬되어 있음을 활용한 투 포인터(Two-Pointer) 병합 (O(N))
+        List<Integer> mergedMinterms = new ArrayList<>();
+        int idx1 = 0, idx2 = 0;
+        while (idx1 < this.minterms.size() && idx2 < other.minterms.size()) {
+            int m1 = this.minterms.get(idx1);
+            int m2 = other.minterms.get(idx2);
+            if (m1 < m2) {
+                mergedMinterms.add(m1);
+                idx1++;
+            } else if (m1 > m2) {
+                mergedMinterms.add(m2);
+                idx2++;
+            } else {
+                mergedMinterms.add(m1);
+                idx1++;
+                idx2++;
+            }
+        }
+        while (idx1 < this.minterms.size()) {
+            mergedMinterms.add(this.minterms.get(idx1++));
+        }
+        while (idx2 < other.minterms.size()) {
+            mergedMinterms.add(other.minterms.get(idx2++));
+        }
 
-        return new Implicant(newTerm, new ArrayList<>(mergedMinterms));
+        return new Implicant(newTerm, mergedMinterms);
     }
 
     /**
